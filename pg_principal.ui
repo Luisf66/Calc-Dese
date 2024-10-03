@@ -43,7 +43,7 @@
      <widget class="QGroupBox" name="groupBox">
       <property name="geometry">
        <rect>
-        <x>130</x>
+        <x>10</x>
         <y>10</y>
         <width>111</width>
         <height>141</height>
@@ -71,7 +71,7 @@
       <property name="checkable">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -138,23 +138,16 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>170</y>
-        <width>221</width>
-        <height>101</height>
+        <x>140</x>
+        <y>20</y>
+        <width>121</width>
+        <height>81</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="conexao_status">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="data">
          <property name="text">
@@ -170,6 +163,32 @@
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="btn_filtrar">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>120</y>
+        <width>111</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Filtrar</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="conexao_status">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>300</y>
+        <width>219</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">

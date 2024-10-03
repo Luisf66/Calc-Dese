@@ -12,6 +12,29 @@ pg_principal::pg_principal(QWidget *parent)
     // Verificar a conexão e atualizar o QLabel
     verificarConexao();
 
+    tabela_notas();
+
+    ui->statusbar->addWidget(ui->conexao_status);
+
+}
+
+pg_principal::~pg_principal()
+{
+    delete ui;
+}
+
+void pg_principal::verificarConexao()
+{
+    if (conexao.conectar()) {
+        ui->conexao_status->setText("Você está conectado");  // Atualiza o texto do QLabel para "CONECTADO" se conectar com sucesso
+    } else {
+        ui->conexao_status->setText("FALHA NA CONEXÃO");  // Atualiza o texto do QLabel em caso de falha
+        conexao.conectar();
+    }
+}
+
+void pg_principal::tabela_notas()
+{
     // configuração da tabela
     ui->tabela_notas->horizontalHeader()->setVisible(true);
     ui->tabela_notas->setColumnCount(6);
@@ -23,7 +46,37 @@ pg_principal::pg_principal(QWidget *parent)
     ui->tabela_notas->setEditTriggers(QAbstractItemView::NoEditTriggers);
     // query
     int nlinhas = 0;
-    QString busca = "SELECT * FROM disciplina ORDER BY periodo DESC";
+    // parametros de busca
+    QString busca = "SELECT * FROM disciplina ";
+    QString crescente = "ORDER BY periodo DESC";
+    if(ui->rb_1->isChecked())
+    {
+        busca = busca + "WHERE periodo = 1";
+    }
+    else if(ui->rb_2->isChecked())
+    {
+        busca = busca + "WHERE periodo = 2";
+    }
+    else if(ui->rb_3->isChecked())
+    {
+        busca = busca + "WHERE periodo = 3";
+    }
+    else if(ui->rb_4->isChecked())
+    {
+        busca = busca + "WHERE periodo = 4";
+    }
+    else if(ui->rb_5->isChecked())
+    {
+        busca = busca + "WHERE periodo = 5";
+    }
+    else if(ui->rb_6->isChecked())
+    {
+        busca = busca + "WHERE periodo = 6";
+    }
+    else{
+        busca = busca + crescente;
+    }
+    qDebug() << "Busca:" << busca;
     QSqlQuery query;
     query.prepare(busca);
     if(query.exec())
@@ -39,24 +92,24 @@ pg_principal::pg_principal(QWidget *parent)
             ui->tabela_notas->setItem(nlinhas,4,new QTableWidgetItem(query.value(4).toString()));
             ui->tabela_notas->setItem(nlinhas,5,new QTableWidgetItem(query.value(5).toString()));
         }while(query.next());
-        conexao.desconectar();
+        //conexao.desconectar();
     }
     else{
         QMessageBox::critical(this,"Falha na Consulta","Não foi possível exibir as notas");
     }
-
 }
 
-pg_principal::~pg_principal()
+void pg_principal::limpar_tabela(QTableWidget *tw)
 {
-    delete ui;
-}
-
-void pg_principal::verificarConexao()
-{
-    if (conexao.conectar()) {
-        ui->conexao_status->setText("Você está conectado");  // Atualiza o texto do QLabel para "CONECTADO" se conectar com sucesso
-    } else {
-        ui->conexao_status->setText("FALHA NA CONEXÃO");  // Atualiza o texto do QLabel em caso de falha
+    while(tw->rowCount() > 0)
+    {
+        tw->removeRow(0);
     }
 }
+
+void pg_principal::on_btn_filtrar_clicked()
+{
+    limpar_tabela(ui->tabela_notas);
+    tabela_notas();
+}
+
