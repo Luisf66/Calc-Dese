@@ -2,6 +2,7 @@
 #define PG_PRINCIPAL_H
 
 #include <QMainWindow>
+#include <QDateTime>
 #include "Conexao.h"
 
 QT_BEGIN_NAMESPACE
