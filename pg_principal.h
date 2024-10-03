@@ -2,6 +2,7 @@
 #define PG_PRINCIPAL_H
 
 #include <QMainWindow>
+#include "Conexao.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +20,7 @@ public:
 
 private:
     Ui::pg_principal *ui;
+    Conexao conexao;  // Instância da classe Conexao para gerenciar a conexão ao banco de dados
+    void verificarConexao();  // Método para verificar a conexão e atualizar o QLabel
 };
 #endif // PG_PRINCIPAL_H
