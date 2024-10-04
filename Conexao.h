@@ -4,8 +4,6 @@
 #include <QtSql>
 #include <QMessageBox>
 #include <QDebug>
-#include <QCoreApplication>
-#include <QSqlDatabase>
 
 class Conexao {
 public:
@@ -17,49 +15,39 @@ public:
     int port;
 
     Conexao() {
-        // Definir parâmetros de conexão com PostgreSQL
-        host = "localhost";       // Nome do container PostgreSQL dentro da rede Docker
-        database = "postgres";      // Nome do banco de dados padrão (pode ser alterado se necessário)
-        user = "postgres";          // Usuário padrão do PostgreSQL
-        password = "postgres";      // Senha definida ao criar o container
-        port = 5433;                // Porta interna do PostgreSQL (não a porta mapeada)
+        // Definir os parâmetros de conexão usando as informações do Supabase
+        host = "aws-0-sa-east-1.pooler.supabase.com";    // Host fornecido pelo Supabase
+        database = "postgres";                           // Nome do banco de dados fornecido
+        user = "postgres.rzekyruutdaztgdsglyu";           // Nome de usuário fornecido
+        password = "iPKHWFil732hQHmd";                  // Substitua pela senha real
+        port = 6543;                                      // Porta fornecida pelo Supabase
 
         // Adiciona o driver do PostgreSQL
         banco_db = QSqlDatabase::addDatabase("QPSQL");
+        banco_db.setHostName(host);
+        banco_db.setDatabaseName(database);
+        banco_db.setUserName(user);
+        banco_db.setPassword(password);
+        banco_db.setPort(port);
     }
 
-    bool conectar(){
-        banco_db.setHostName(host);           // Definir o host
-        banco_db.setDatabaseName(database);   // Nome do banco de dados
-        banco_db.setUserName(user);           // Nome do usuário
-        banco_db.setPassword(password);       // Senha do usuário
-        banco_db.setPort(port);               // Porta do PostgreSQL
-
-        // Tenta abrir a conexão
-        if(!banco_db.open())
-        {
+    bool conectar() {
+        if (!banco_db.open()) {
             qDebug() << "Erro ao conectar ao banco de dados PostgreSQL: " << banco_db.lastError().text();
             return false;
-        }
-        else{
+        } else {
             qDebug() << "Conexão com banco de dados PostgreSQL bem-sucedida!";
             return true;
         }
     }
 
-    void desconectar(){
+    void desconectar() {
         banco_db.close();
         qDebug() << "Conexão com o banco de dados foi fechada.";
     }
 
-    bool verifica_conexao(){
-        if(banco_db.isOpen())
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+    bool verifica_conexao() {
+        return banco_db.isOpen();
     }
 };
 
