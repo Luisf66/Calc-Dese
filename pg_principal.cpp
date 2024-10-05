@@ -113,3 +113,93 @@ void pg_principal::on_btn_filtrar_clicked()
     tabela_notas();
 }
 
+void pg_principal::exibirGraficoNotas()
+{
+    // Coletar os dados do banco de dados
+    QString busca = "SELECT id, resultado, periodo FROM disciplina";
+    QSqlQuery query;
+    query.prepare(busca);
+
+    if (!query.exec()) {
+        QMessageBox::critical(this, "Falha na Consulta", "Não foi possível obter os dados para o gráfico");
+        return;
+    }
+
+    // Mapa para armazenar a soma dos resultados e a contagem por período
+    QMap<int, double> somaResultadosPorPeriodo;
+    QMap<int, int> contagemPorPeriodo;
+
+    // Processar os resultados do banco de dados
+    while (query.next()) {
+        int periodo = query.value(2).toInt();  // Obtém o valor do período
+        double resultado = query.value(1).toDouble();  // Obtém o valor do resultado
+
+        // Acumula a soma dos resultados por período
+        if (somaResultadosPorPeriodo.contains(periodo)) {
+            somaResultadosPorPeriodo[periodo] += resultado;
+            contagemPorPeriodo[periodo] += 1;  // Incrementa a contagem de disciplinas para o período
+        } else {
+            somaResultadosPorPeriodo[periodo] = resultado;
+            contagemPorPeriodo[periodo] = 1;  // Inicializa a contagem de disciplinas para o período
+        }
+    }
+
+    // Preparar os dados para o gráfico
+    QVector<QString> periodos;
+    QVector<double> mediasPorPeriodo;
+
+    // Calcular a média dos resultados por período
+    for (auto it = somaResultadosPorPeriodo.constBegin(); it != somaResultadosPorPeriodo.constEnd(); ++it) {
+        int periodo = it.key();
+        double somaResultados = it.value();
+        int contagem = contagemPorPeriodo.value(periodo);
+
+        // Calcula a média dos resultados para o período
+        double media = somaResultados / contagem;
+
+        // Armazena o período e a média
+        periodos.append("Período " + QString::number(periodo));
+        mediasPorPeriodo.append(media);
+        qDebug() << "descrição do grafico: " << periodos;
+
+        // Debug para verificar o cálculo da média
+        qDebug() << "Período:" << periodo << "Média dos Resultados:" << media;
+    }
+
+    // Criar o widget gráfico
+    CustomChart *grafico = new CustomChart();
+    grafico->setData(periodos, {mediasPorPeriodo}); // Passar os rótulos dos períodos e os valores médios
+
+    // Limpar o conteúdo da aba `tab_2` antes de adicionar o novo gráfico
+    if (ui->tab_2->layout() != nullptr) {
+        QLayoutItem *item;
+        while ((item = ui->tab_2->layout()->takeAt(0)) != nullptr) {
+            delete item->widget(); // Apaga o widget (o gráfico antigo)
+            delete item;           // Apaga o item do layout
+        }
+        delete ui->tab_2->layout();
+    }
+
+    // Configurar o layout para a `tab_2` e adicionar o gráfico
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(grafico);
+    ui->tab_2->setLayout(layout);
+}
+
+
+
+void pg_principal::on_tabWidget_currentChanged(int index)
+{
+    if(index == 2)
+    {
+        qDebug() << "Segunda guia";
+
+    }
+}
+
+
+void pg_principal::on_btn_grafico_clicked()
+{
+    exibirGraficoNotas();
+}
+

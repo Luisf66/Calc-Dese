@@ -195,6 +195,19 @@
      <attribute name="title">
       <string>Gráfico</string>
      </attribute>
+     <widget class="QPushButton" name="btn_grafico">
+      <property name="geometry">
+       <rect>
+        <x>910</x>
+        <y>10</y>
+        <width>101</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Exibir Gráfico</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

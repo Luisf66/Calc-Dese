@@ -5,6 +5,11 @@
 #include <QDateTime>
 #include <QTableWidget>
 
+#include "customchart.h"
+#include <QSqlQuery>
+#include <QMessageBox>
+#include <QVBoxLayout>
+
 #include "Conexao.h"
 
 QT_BEGIN_NAMESPACE
@@ -25,10 +30,15 @@ public:
 private slots:
     void on_btn_filtrar_clicked();
 
+    void on_tabWidget_currentChanged(int index);
+
+    void on_btn_grafico_clicked();
+
 private:
     Ui::pg_principal *ui;
     Conexao conexao;  // Instância da classe Conexao para gerenciar a conexão ao banco de dados
     void verificarConexao();  // Método para verificar a conexão e atualizar o QLabel]
     void tabela_notas();
+    void exibirGraficoNotas();
 };
 #endif // PG_PRINCIPAL_H
