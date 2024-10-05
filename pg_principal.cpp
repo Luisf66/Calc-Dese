@@ -160,7 +160,6 @@ void pg_principal::exibirGraficoNotas()
         // Armazena o período e a média
         periodos.append("Período " + QString::number(periodo));
         mediasPorPeriodo.append(media);
-        qDebug() << "descrição do grafico: " << periodos;
 
         // Debug para verificar o cálculo da média
         qDebug() << "Período:" << periodo << "Média dos Resultados:" << media;
@@ -168,7 +167,7 @@ void pg_principal::exibirGraficoNotas()
 
     // Criar o widget gráfico
     CustomChart *grafico = new CustomChart();
-    grafico->setData(periodos, {mediasPorPeriodo}); // Passar os rótulos dos períodos e os valores médios
+    grafico->setData(periodos, mediasPorPeriodo); // Passar os rótulos dos períodos e os valores médios
 
     // Limpar o conteúdo da aba `tab_2` antes de adicionar o novo gráfico
     if (ui->tab_2->layout() != nullptr) {
