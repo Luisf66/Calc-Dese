@@ -15,6 +15,7 @@ pg_principal::pg_principal(QWidget *parent)
     tabela_notas();
 
     ui->statusbar->addWidget(ui->conexao_status);
+    ui->statusbar->addWidget(ui->btn_grafico);
 
 }
 
@@ -167,7 +168,7 @@ void pg_principal::exibirGraficoNotas()
 
     // Criar o widget gráfico
     CustomChart *grafico = new CustomChart();
-    grafico->setData(periodos, mediasPorPeriodo); // Passar os rótulos dos períodos e os valores médios
+    grafico->setData(periodos, mediasPorPeriodo);
 
     // Limpar o conteúdo da aba `tab_2` antes de adicionar o novo gráfico
     if (ui->tab_2->layout() != nullptr) {
@@ -179,11 +180,19 @@ void pg_principal::exibirGraficoNotas()
         delete ui->tab_2->layout();
     }
 
-    // Configurar o layout para a `tab_2` e adicionar o gráfico
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(grafico);
+    // Configurar o layout usando QGridLayout
+    QGridLayout *layout = new QGridLayout;
+
+    // Definir margens e espaçamento
+    layout->setContentsMargins(10, 10, 10, 10);
+    layout->setSpacing(10);
+
+    // Adicionar o gráfico em uma posição específica (linha 0, coluna 0)
+    layout->addWidget(grafico, 0, 0, 1, 1, Qt::AlignCenter);  // (linha, coluna, rowspan, colspan, alinhamento)
+
     ui->tab_2->setLayout(layout);
 }
+
 
 
 
